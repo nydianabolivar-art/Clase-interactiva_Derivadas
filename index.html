@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master en Derivadas - Clase Interactiva</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: #1e293b;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin-top: 2rem;
+        }
+
+        /* Sistema de Pestañas */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: #e2e8f0;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 0 8px 8px 8px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active { display: block; }
+
+        /* Estilos de Contenido */
+        .formula {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-left: 5px solid var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .exercise-card {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 2px solid #cbd5e1;
+            border-radius: 4px;
+            width: 150px;
+        }
+
+        button.check-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: var(--danger); }
+
+        .practice-zone {
+            text-align: center;
+            padding: 2rem;
+            background: #eff6ff;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Introducción a las Derivadas</h1>
+    <p>Aprende la Regla de la Potencia de forma interactiva</p>
+</header>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'teoria')">📚 Teoría</button>
+        <button class="tab-btn" onclick="openTab(event, 'ejemplos')">💡 Ejemplos</button>
+        <button class="tab-btn" onclick="openTab(event, 'practica')">✏️ ¡A practicar!</button>
+    </div>
+
+    <div id="teoria" class="tab-content active">
+        <h2>La Regla de la Potencia</h2>
+        <p>Derivar es, en esencia, encontrar la razón de cambio o la pendiente de una función en un punto dado.</p>
+        <p>La regla más básica y poderosa es para funciones de tipo <strong>f(x) = x<sup>n</sup></strong>:</p>
+        <div class="formula">
+            Si f(x) = x<sup>n</sup>  ➜  f'(x) = n · x<sup>n-1</sup>
+        </div>
+        <ul>
+            <li>El exponente <strong>n</strong> baja a multiplicar.</li>
+            <li>Al exponente original se le resta <strong>1</strong>.</li>
+        </ul>
+    </div>
+
+    <div id="ejemplos" class="tab-content">
+        <h2>Ejercicios Guiados</h2>
+        <p>Resuelve los siguientes ejercicios. Recuerda usar el formato <b>nx^m</b> (ejemplo: 3x^2).</p>
+        
+        <div class="exercise-card">
+            <p>1. Deriva f(x) = x<sup>5</sup></p>
+            <input type="text" id="q1" placeholder="Tu respuesta...">
+            <button class="check-btn" onclick="checkAnswer('q1', '5x^4')">Revisar</button>
+            <div id="feedback-q1" class="feedback"></div>
+        </div>
+
+        <div class="exercise-card">
+            <p>2. Deriva f(x) = 3x<sup>2</sup></p>
+            <input type="text" id="q2" placeholder="Tu respuesta...">
+            <button class="check-btn" onclick="checkAnswer('q2', '6x^1', '6x')">Revisar</button>
+            <div id="feedback-q2" class="feedback"></div>
+        </div>
+    </div>
+
+    <div id="practica" class="tab-content">
+        <div class="practice-zone">
+            <h2>Generador de Desafíos</h2>
+            <p>Calcula la derivada de la siguiente función:</p>
+            <h1 id="random-problem">f(x) = 4x<sup>3</sup></h1>
+            <input type="text" id="user-practice" placeholder="Ej: 12x^2">
+            <br><br>
+            <button class="check-btn" style="background: var(--success);" onclick="checkRandom()">Validar Respuesta</button>
+            <button class="check-btn" style="background: var(--secondary);" onclick="generateProblem()">Nuevo Problema</button>
+            <div id="feedback-practice" class="feedback"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Lógica de Pestañas
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.className += " active";
+    }
+
+    // Validación de respuestas fijas
+    function checkAnswer(id, correct, alt = "") {
+        const input = document.getElementById(id).value.trim().toLowerCase();
+        const feedback = document.getElementById("feedback-" + id);
+        
+        if (input === correct || (alt !== "" && input === alt)) {
+            feedback.innerHTML = "¡Excelente! Correcto. 🎉";
+            feedback.className = "feedback correct";
+        } else {
+            feedback.innerHTML = "Casi... Inténtalo de nuevo. Pista: n*x^(n-1)";
+            feedback.className = "feedback incorrect";
+        }
+    }
+
+    // Lógica de Práctica Aleatoria
+    let currentAns = "12x^2";
+
+    function generateProblem() {
+        const coef = Math.floor(Math.random() * 9) + 2;
+        const exp = Math.floor(Math.random() * 5) + 2;
+        document.getElementById('random-problem').innerHTML = `f(x) = ${coef}x<sup>${exp}</sup>`;
+        
+        const newCoef = coef * exp;
+        const newExp = exp - 1;
+        currentAns = newExp === 1 ? `${newCoef}x` : `${newCoef}x^${newExp}`;
+        
+        document.getElementById('feedback-practice').innerHTML = "";
+        document.getElementById('user-practice').value = "";
+    }
+
+    function checkRandom() {
+        const userInp = document.getElementById('user-practice').value.trim().toLowerCase();
+        const feedback = document.getElementById('feedback-practice');
+        
+        if (userInp === currentAns) {
+            feedback.innerHTML = "¡Brillante! Esa es la respuesta.";
+            feedback.className = "feedback correct";
+        } else {
+            feedback.innerHTML = `Incorrecto. La respuesta era ${currentAns}`;
+            feedback.className = "feedback incorrect";
+        }
+    }
+</script>
+
+</body>
+</html>
